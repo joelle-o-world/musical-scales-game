@@ -2,10 +2,12 @@ import {RootState} from "../../app/store";
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import parsePitch from "../../pitch";
 import {decrementPitchSpelling, availableSpellings, incrementPitchSpelling} from "../../pitchSpellingArithmetic";
+import checkSolution from '../../checkSolution';
 
 export interface ScaleEditorState {
   steps: string[];
   currentStep: number;
+  report?: ReturnType<typeof checkSolution>;
 }
 
 const initialState: ScaleEditorState = {
@@ -21,14 +23,17 @@ export const scaleEditorSlice = createSlice({
     incrementStep: (state, action:PayloadAction<number>) => {
       let index = action.payload;
       state.steps[index] = incrementPitchSpelling(state.steps[index])
+      state.report = checkSolution(state.steps)
     },
     decrementStep: (state, action:PayloadAction<number>) => {
       let index = action.payload;
       state.steps[index] = decrementPitchSpelling(state.steps[index])
+      state.report = checkSolution(state.steps)
     },
     setCurrentStep: (state, action:PayloadAction<string>) => {
       if(availableSpellings.includes(action.payload))
         state.steps[state.currentStep] = action.payload
+      state.report = checkSolution(state.steps)
     },
     focusStep: (state, action: PayloadAction<number>) => {
       state.currentStep = action.payload
