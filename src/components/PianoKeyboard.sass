@@ -1,0 +1,78 @@
+@use "PitchBG" as *
+
+$w: 50px
+$b: 30px
+$h: 200px
+$white-key-spacing: 1px
+
+@mixin HighlightedKey
+  //@include PitchBG
+  background-color: pink
+  border-color: darken(pink, 10%)
+
+.PianoKeyboard
+  position: relative
+    
+  .PianoKeyboardOverlay
+    position: absolute
+    pointer-events: none
+    left: 0px
+    right: 0px
+    top: 0px
+    bottom: 0px
+    z-index: 3
+  .PianoKeyboardKey
+    position: absolute
+    box-sizing: border-box
+    outline: none
+    user-select: none
+    -moz-user-select: none
+    -khtml-user-select: none
+    -webkit-user-select: none
+    io-user-select: none
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    flex-direction: column
+    cursor: pointer
+    font-family: monospace
+
+  .PianoKeyboardKey.PianoKeyboardWhiteKey
+    z-index: 1
+    color: #999
+    //width: $w - $white-key-spacing 
+    box-sizing: border-box
+    background-color: white
+    border-bottom: 30px solid #eee
+    box-shadow: 0px 0px 1px black
+    transition: border-bottom .1s, background-color .1s
+    &.highlighted
+      @include HighlightedKey
+    &:hover
+      //border-bottom: 50px solid #eee
+
+    &:active
+      border-bottom: 5px solid #eee
+
+  .PianoKeyboardKey.PianoKeyboardBlackKey
+    z-index: 2
+    pointer-events: auto
+    box-sizing: border-box
+    //width: $b 
+    font-size: 12px
+    background-color: black
+    color: white
+
+    border-bottom-color: 15px solid #222
+    border-left: 4px solid #444
+    border-right: 4px solid #444
+    border-top: 1px solid transparent
+
+    &.highlighted
+      @include HighlightedKey
+
+    transition: border-bottom .1s, background-color .1s
+    &:hover
+      //border-bottom: 30px solid #222
+    &:active
+      border-bottom: 1px solid #222
