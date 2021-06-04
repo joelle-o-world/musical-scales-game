@@ -44,7 +44,7 @@ export const PianoKeyboard: FunctionComponent<{
   hotKeys?: string[];
   hotKeyOffset?: number
   highlightKeys?: number[];
-  highlightPitchClasses?: number[]
+  highlightPitchClasses?: (number|{pitchClass:number, color: string})[]
   labelKeys?: boolean;
 
   // The lowest note on the keyboard
@@ -91,7 +91,6 @@ export const PianoKeyboard: FunctionComponent<{
   
 
 
-  console.log(highlightPitchClasses)
   useEffect( () => {
     const handleKeyDown = (e: any) => {
       if(hotKeys.includes(e.key)) {

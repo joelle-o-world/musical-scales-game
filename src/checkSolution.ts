@@ -1,5 +1,5 @@
 
-const solutions = (() => {
+const scales:Scale[] = (() => {
   let solutions:{[key: string]: string} = {
     'C Major': 'C D E F G A B',
     'Db Major': 'Db Eb F Gb Ab Bb C',
@@ -15,55 +15,87 @@ const solutions = (() => {
     'Bb Major': 'Bb C D Eb F G A',
     'B Major': 'B C# D# E F# G# A#',
   }
-  let solutionsParsed:{[key: string]: string[]} = {}
+  let scales = []
   for(const key in solutions)
-    solutionsParsed[key] = solutions[key].split(' ')
-  return solutionsParsed
+    scales.push({
+      name: key,
+      steps: solutions[key].split(' ')
+    })
+  return scales
 })()
 
 
-export function checkSolution(steps: string[]): {
-  correct: boolean;
-  scale?: string;
-  reason?: string;
-} {
-  for(let scale in solutions) {
-    const scaleSteps = solutions[scale]
+interface Scale {
+  name: string;
+  steps: string[]
+}
 
-    let score = 0
-    for(let i=0; i < steps.length; ++i)
-      if(scaleSteps[i%scaleSteps.length] === steps[i])
-        ++score
 
+//type CheckedSolution = {correct: false} | {
+  //correct: false;
+  //closestScale: Scale;
+  //report: any
+//} | {
+  //correct: true,
+  //scale: Scale,
+//}
+
+export function checkSolution(steps: string[]){
+
+
+  let scaleReports = scales.map(scale => {
+    const noteByNote = steps.map((step,i) => scale.steps[i%scale.steps.length] === step)
+    const correctDegrees = []
+    const incorrectDegrees = []
+    for(let i=0; i < noteByNote.length; ++i) {
+      if(noteByNote[i])
+        correctDegrees.push(i)
+      else
+        incorrectDegrees.push(i)
+    }
+
+    const score = correctDegrees.length
+
+    const stepsAreDiatonic = steps.every(step => scale.steps.includes(step))
+    const allNotesPresent = scale.steps.every(step => steps.includes(step))
+    const stepsAreUnique = steps.every((step, i) => !steps.slice(i+1).includes(step))
     const perfectMatch = score === steps.length
 
-    if(perfectMatch)
-      return {
-        correct: true,
-        scale,
-      }
+    return {
+      scale,
+      correctDegrees,
+      incorrectDegrees,
+      score,
+      stepsAreDiatonic,
+      allNotesPresent,
+      stepsAreUnique,
+      perfectMatch,
+    }
+  })
+
+  let winner
+  for(let report of scaleReports)
+    if(!winner || report.score > winner.score)
+      winner = report
+
+  if(!winner) {
+    return {
+      correct: false
+    }
   }
 
-  // Otherwise
-  for(let scale in solutions) {
-    const scaleSteps = solutions[scale]
-    const stepsAreDiatonic = steps.every(step => scaleSteps.includes(step))
-    //const stepsAreUnique = steps.every((step, i) => !steps.slice(i+1).includes(step))
-    const allNotesPresent = scaleSteps.every(step => steps.includes(step))
-
-    if(stepsAreDiatonic)
-      return {
-        correct: false,
-        scale,
-        reason: `You have the ${ allNotesPresent ? 'all' : 'some of' } right notes for ${scale} but not in the right order`
-      }
-
-  }
-
-  // Otherwise
-  return {
-    correct: false,
-  }
+  if(winner.perfectMatch) {
+    return {
+      correct: true,
+      scale: winner.scale,
+      report: winner,
+    }
+  } else
+    return {
+      correct: false,
+      closestScale: winner.scale,
+      report: winner,
+    }
 }
 
 export default checkSolution;
