@@ -1,11 +1,13 @@
 import React, {FunctionComponent} from 'react';
 import {useSelector} from 'react-redux';
 import {selectScaleEditor} from '../features/scaleEditor/scaleEditorSlice';
+import {useSynth} from '../features/synth/synth';
 import parsePitch, {pitchClassOf} from '../pitch';
 import PianoKeyboard from './PianoKeyboard';
 
 export const CorrectAnswer: FunctionComponent = () => {
   const {report} = useSelector(selectScaleEditor)
+  const synth = useSynth()
 
   if(!report)
     return null
@@ -20,6 +22,7 @@ export const CorrectAnswer: FunctionComponent = () => {
       return <div>
         <h2>Correct! You have spelled {scale.name}</h2>
         <PianoKeyboard 
+          onNote={e => { synth.play(e.pitchNumber) }}
           lowestNote={48} 
           numberOfKeys={25}
           highlightPitchClasses={pitchClasses}

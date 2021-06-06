@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {FunctionComponent, useEffect, createContext} from 'react';
 import classNames from 'classnames';
-import {keyNames, flatKeyNames, octaveOf, pitchClassOf, isBlackNote} from '../pitch';
+import {keyNames, flatKeyNames, octaveOf, pitchClassOf, isBlackNote, sharpKeyNames} from '../pitch';
 
 import './PianoKeyboard.sass';
 
@@ -45,7 +45,7 @@ export const PianoKeyboard: FunctionComponent<{
   hotKeyOffset?: number
   highlightKeys?: number[];
   highlightPitchClasses?: (number|{pitchClass:number, color: string})[]
-  labelKeys?: boolean;
+  labelKeys?: boolean|'name-only'|'# or b'|'standard';
 
   // The lowest note on the keyboard
   lowestNote?: number;
@@ -193,6 +193,14 @@ export const PianoKeyboard: FunctionComponent<{
 
     const {left, width, top, height, deepness} = keyPositions[pitch];
 
+    let label
+    if(labelKeys === true)
+      label = keyLabel(pitch, 'standard')
+    else if(labelKeys)
+      label = keyLabel(pitch, labelKeys)
+    else
+      label = hotKey || ' '
+
     const btn = <div 
       onMouseDown={handlePress} 
       key={i} 
@@ -204,7 +212,7 @@ export const PianoKeyboard: FunctionComponent<{
         height: `${height}px`,
         borderBottomWidth: (deepness)+'px',
       }}
-    >{labelKeys ? fullName : (hotKey || ' ')}</div>
+    >{label}</div>
 
     keys.push(btn)
   }
@@ -222,3 +230,21 @@ export const PianoKeyboard: FunctionComponent<{
 }
 
 export default PianoKeyboard
+
+function keyLabel(pitch: number, format: 'standard'|'name-only'|'# or b' = 'standard') {
+  if(format === 'standard')
+    return `${keyNames[pitchClassOf(pitch)]}${octaveOf(pitch)}`
+
+  else if(format === 'name-only')
+    return keyNames[pitchClassOf(pitch)]
+ 
+  else if(format === '# or b') {
+    const pc = pitchClassOf(pitch)
+    const sharpKeyName = sharpKeyNames[pc]
+    const flatKeyName = flatKeyNames[pc]
+    if(sharpKeyName !== flatKeyName)
+      return `${sharpKeyName} or ${flatKeyName}`
+    else
+      return sharpKeyName
+  }
+}

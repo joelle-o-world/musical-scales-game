@@ -22,7 +22,7 @@ export const ScaleDegreesPianoIndicator: FunctionComponent = () => {
     highlightPitchClasses={highlights} 
     numberOfKeys={25} 
     lowestNote={48} 
-    labelKeys
+    labelKeys="# or b"
     onNote={e => {
       dispatch(setCurrentStep(e.pitchName))
     }}

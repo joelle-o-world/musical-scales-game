@@ -6,7 +6,6 @@ export const sharpKeyNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', '
 
 export const octaveOf = (p: number) => Math.floor(p / 12);
 export const pitchClassOf = (p: number, twelve=12) => {
-  console.log('pitchClassOf(',p,')')
   while(p < 0)
     p += twelve;
   return p%twelve

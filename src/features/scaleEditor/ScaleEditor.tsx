@@ -1,12 +1,13 @@
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import classNames from 'classnames';
 import {selectScaleEditor, incrementStep, decrementStep, focusStep} from './scaleEditorSlice';
-import {printPitch} from '../../pitch';
+import {printPitch, parsePitch} from '../../pitch';
 
 import {AiOutlineArrowDown, AiOutlineArrowUp} from 'react-icons/ai'
 
 import './ScaleEditor.sass'
+import {useSynth} from '../synth/synth';
 
 
 export const ScaleEditor: FunctionComponent = () => {
@@ -16,10 +17,16 @@ export const ScaleEditor: FunctionComponent = () => {
   </div>
 }
 
-export const ScaleEditorStep: FunctionComponent<{stepNumber: number}> = ({ stepNumber}) => {
+export const ScaleEditorStep: FunctionComponent<{stepNumber: number, lowestPitch?: number}> = ({ stepNumber, lowestPitch}) => {
   const dispatch = useDispatch()
   const {steps, currentStep} = useSelector(selectScaleEditor)
   const pitch = steps[stepNumber]
+  parsePitch(pitch)
+
+  const synth = useSynth()
+  useEffect(() => {
+    synth.play(pitch)
+  }, [pitch])
 
   return <div 
     className={classNames("ScaleEditorStep", {currentStep: currentStep === stepNumber})} 

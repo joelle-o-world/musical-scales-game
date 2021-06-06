@@ -1,3 +1,4 @@
+@use "../../C64" as *
 .ScaleEditor
   display: flex
   flex-direction: row
@@ -10,7 +11,7 @@
     flex-direction: column
     padding: 10px
     &.currentStep
-      background-color: #ccc
+      background-color: $green
     .PitchDisplay
       background-color: transparent
       height: 3em

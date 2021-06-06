@@ -34,7 +34,6 @@ export const scaleEditorSlice = createSlice({
       if(availableSpellings.includes(action.payload))
         state.steps[state.currentStep] = action.payload
       state.report = checkSolution(state.steps)
-      state.currentStep = (state.currentStep+1)%state.steps.length
     },
     focusStep: (state, action: PayloadAction<number>) => {
       state.currentStep = action.payload
