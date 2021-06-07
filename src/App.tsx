@@ -8,11 +8,14 @@ import {useSelector} from 'react-redux';
 import {selectScaleEditor} from './features/scaleEditor/scaleEditorSlice';
 import CorrectAnswer from './components/CorrectAnswer'
 
+import CircleOfFifthsBanner from './img/circle-of-fifths-banner.jpg'
+
 function App() {
   const {report} = useSelector(selectScaleEditor)
   return (
     <div className="App">
       <h1>Musical Scales Game</h1> 
+      <img src={CircleOfFifthsBanner} className="TopBanner" />
       <ScaleEditor/>
       {report && report.correct 
         ? <CorrectAnswer/>
