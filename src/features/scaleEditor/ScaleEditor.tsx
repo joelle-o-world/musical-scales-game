@@ -71,6 +71,7 @@ export const ScaleEditorStep: FunctionComponent<{stepNumber: number, lowestPitch
       ref={inputRef}
       value={pitch} 
       onChange={e => dispatch(setCurrentStep(e.target.value))}
+      onFocus={() => synth.play(pitch)}
     />
     <button 
       className="DecrementPitchButton" 

@@ -26,6 +26,7 @@ export const CorrectAnswer: FunctionComponent = () => {
           lowestNote={48} 
           numberOfKeys={25}
           highlightPitchClasses={pitchClasses}
+          labelKeys="# or b"
         />
       </div>
     } else
