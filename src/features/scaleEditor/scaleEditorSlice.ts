@@ -1,7 +1,7 @@
 import {RootState} from "../../app/store";
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import parsePitch from "../../pitch";
-import {decrementPitchSpelling, availableSpellings, incrementPitchSpelling} from "../../pitchSpellingArithmetic";
+import {decrementPitchSpelling,  searchSpelling, incrementPitchSpelling} from "../../pitchSpellingArithmetic";
 import checkSolution from '../../checkSolution';
 
 export interface ScaleEditorState {
@@ -31,9 +31,11 @@ export const scaleEditorSlice = createSlice({
       state.report = checkSolution(state.steps)
     },
     setCurrentStep: (state, action:PayloadAction<string>) => {
-      if(availableSpellings.includes(action.payload))
-        state.steps[state.currentStep] = action.payload
-      state.report = checkSolution(state.steps)
+      let spelling = searchSpelling(action.payload)
+      if(spelling) {
+        state.steps[state.currentStep] = spelling
+        state.report = checkSolution(state.steps)
+      }
     },
     focusStep: (state, action: PayloadAction<number>) => {
       state.currentStep = action.payload

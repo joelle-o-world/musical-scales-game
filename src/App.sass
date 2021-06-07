@@ -2,8 +2,46 @@
 
 body
   background-color: $borderBlue
+  @include CommodoreFont
 .App
   margin: 100px
   background-color: $bgBlue
   text-align: center
   color: $borderBlue
+
+
+.ScaleEditor
+  display: flex
+  flex-direction: row
+  justify-content: space-around
+  max-width: 900px
+  margin-right: auto
+  margin-left: auto
+  margin-bottom: 100px
+  .ScaleEditorStep
+    display: flex
+    flex-direction: column
+    padding: 10px
+    &.currentStep
+      background-color: $green
+    .PitchDisplay
+      height: 3em
+      width: 3em
+      text-align: center
+      font-size: 36px
+      @include CommodoreFont
+      background-color: white
+      border: none
+    .IncrementPitchButton, .DecrementPitchButton
+      font-family: inherit
+      background: none
+      border: none
+      color: $cyan
+      font-size: 30px
+      &:hover
+        background-color: $orange
+        color: $bgBlue
+        cursor: pointer
+      
+
+
