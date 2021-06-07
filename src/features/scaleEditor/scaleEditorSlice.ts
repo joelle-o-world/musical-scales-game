@@ -40,10 +40,29 @@ export const scaleEditorSlice = createSlice({
     focusStep: (state, action: PayloadAction<number>) => {
       state.currentStep = action.payload
     },
+
+    incrementCurrentStep: state => {
+      state.steps[state.currentStep] = incrementPitchSpelling(state.steps[state.currentStep])
+      state.report = checkSolution(state.steps)
+    },
+    decrementCurrentStep: state => {
+      state.steps[state.currentStep] = decrementPitchSpelling(state.steps[state.currentStep])
+      state.report = checkSolution(state.steps)
+    },
+
+    nextStep: state => {
+      state.currentStep = (state.currentStep + 1) % state.steps.length
+    },
+
+    previousStep: state => {
+      state.currentStep = state.currentStep - 1
+      if(state.currentStep < 0)
+        state.currentStep += state.steps.length
+    }
   },
 })
 
-export const {incrementStep, decrementStep, focusStep, setCurrentStep} = scaleEditorSlice.actions;
+export const {incrementStep, decrementStep, focusStep, setCurrentStep, incrementCurrentStep, decrementCurrentStep, nextStep, previousStep} = scaleEditorSlice.actions;
 
 export const selectScaleEditor = (state: RootState) => state.scaleEditor
 

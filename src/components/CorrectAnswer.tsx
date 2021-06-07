@@ -19,7 +19,7 @@ export const CorrectAnswer: FunctionComponent = () => {
         .filter(p => typeof p === 'number')
         // @ts-ignore
         .map((p:number) => pitchClassOf(p))
-      return <div>
+      return <div className="CorrectAnswer">
         <h2>Correct! You have spelled {scale.name}</h2>
         <PianoKeyboard 
           onNote={e => { synth.play(e.pitchNumber) }}

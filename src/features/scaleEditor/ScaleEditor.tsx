@@ -1,7 +1,7 @@
 import React, {FunctionComponent, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import classNames from 'classnames';
-import {selectScaleEditor, incrementStep, decrementStep, focusStep, setCurrentStep} from './scaleEditorSlice';
+import {selectScaleEditor, incrementStep, decrementStep, focusStep, setCurrentStep, previousStep, nextStep, incrementCurrentStep, decrementCurrentStep} from './scaleEditorSlice';
 import {printPitch, parsePitch} from '../../pitch';
 
 import {AiOutlineArrowDown, AiOutlineArrowUp} from 'react-icons/ai'
@@ -12,7 +12,28 @@ import {useSynth} from '../synth/synth';
 
 export const ScaleEditor: FunctionComponent = () => {
   const {steps} = useSelector(selectScaleEditor)
-  return <div className="ScaleEditor">
+  const dispatch = useDispatch()
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    switch(e.key) {
+      case 'ArrowUp':
+        dispatch(incrementCurrentStep())
+        break;
+      case 'ArrowDown':
+        dispatch(decrementCurrentStep())
+        break;
+
+      case 'ArrowLeft':
+        dispatch(previousStep())
+        break
+
+      case 'ArrowRight':
+        dispatch(nextStep())
+        break
+    }
+  }
+
+  return <div className="ScaleEditor" onKeyDown={handleKeyDown}>
     {steps.map((step, i) => <ScaleEditorStep stepNumber={i} key={i} />)}
   </div>
 }
@@ -36,10 +57,6 @@ export const ScaleEditorStep: FunctionComponent<{stepNumber: number, lowestPitch
   }, [currentStep, pitch])
 
 
-  const handleKeyPress = (e:React.KeyboardEvent) => {
-    console.log(e.key)
-    let concatenated = pitch + e.key
-  }
 
   let id = `ScaleEditorStep_${stepNumber}`
 
@@ -47,7 +64,6 @@ export const ScaleEditorStep: FunctionComponent<{stepNumber: number, lowestPitch
     className={classNames("ScaleEditorStep", {currentStep: currentStep === stepNumber})} 
     id={id}
     onMouseDown={() => dispatch(focusStep(stepNumber))}
-    onKeyPress={handleKeyPress}
   >
     <button onClick={() => dispatch(incrementStep(stepNumber))} className="IncrementPitchButton"><AiOutlineArrowUp/></button>
     <input 
