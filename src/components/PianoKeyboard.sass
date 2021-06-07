@@ -11,6 +11,7 @@ $white-key-spacing: 1px
   &, &:hover, &:active
     background-color: $green
     border-color: darken($green, 10%)
+    color: white
 
 
 .PianoKeyboard
@@ -38,7 +39,8 @@ $white-key-spacing: 1px
     justify-content: flex-end
     flex-direction: column
     cursor: pointer
-    font-family: monospace
+    //font-family: monospace
+    @include CommodoreFont
 
   .PianoKeyboardKey.PianoKeyboardWhiteKey
     z-index: 1

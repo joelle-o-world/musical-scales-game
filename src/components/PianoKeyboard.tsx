@@ -203,6 +203,10 @@ export const PianoKeyboard: FunctionComponent<{
 
     const btn = <div 
       onMouseDown={handlePress} 
+      onMouseOver={e => {
+        if(e.buttons === 1)
+          handlePress()
+      }}
       key={i} 
       className={className}
       style={{

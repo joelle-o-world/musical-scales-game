@@ -18,7 +18,6 @@ function App() {
         ? <CorrectAnswer/>
         : <ScaleDegreesPianoIndicator/>
       }
-      <pre>{JSON.stringify(report)}</pre>
     </div>
   );
 }
